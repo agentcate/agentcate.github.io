@@ -4,21 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Agent Cat • Farcaster Mini App</title>
-  <!-- Farcaster Mini App Metadata -->
-  <meta name="fc:miniapp" content='{
-    "version":"1",
-    "imageUrl":"https://agentcate-github-io.vercel.app/image.png",
-    "button":{
-      "title":"Claim WL Spot",
-      "action":{
-        "type":"launch_frame",
-        "name":"Agent Cat",
-        "url":"https://agentcate-github-io.vercel.app/",
-        "splashImageUrl":"https://agentcate-github-io.vercel.app/splash.png",
-        "splashBackgroundColor":"#ff4d8d"
-      }
+  <!-- Farcaster Mini App Required URL -->
+<meta name="fc:miniapp:url" content="https://agentcate-github-io.vercel.app/" />
+
+<!-- Farcaster Mini App Metadata (Button + Splash + Image) -->
+<meta name="fc:miniapp" content='{
+  "version": "1",
+  "imageUrl": "https://agentcate-github-io.vercel.app/image.png",
+  "button": {
+    "title": "Claim WL Spot",
+    "action": {
+      "type": "launch_frame",
+      "url": "https://agentcate-github-io.vercel.app/",
+      "splashImageUrl": "https://agentcate-github-io.vercel.app/splash.png",
+      "splashBackgroundColor": "#ff4d8d"
     }
-  }' />
+  }
+}' />
   <link href="https://fonts.googleapis.com/css2?family=Monument+Extended:wght@400;800&family=Neue+Montreal:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
