@@ -4,13 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Agent Cat • Farcaster Mini App</title>
-  <!-- Farcaster Mini App Metadata - FIXED -->
-  <meta name="fc:miniapp:icon" content="https://agentcate-github-io.vercel.app/icon.png">
-  <meta name="fc:miniapp:splash" content="https://agentcate-github-io.vercel.app/splash.png">
-  <meta name="fc:miniapp:title" content="Agent Cat">
-  <meta name="fc:miniapp:description" content="AgentCat 3333 - The Secret Agents of the Internet">
-  <meta name="fc:miniapp:url" content="https://agentcate-github-io.vercel.app/">
-  
+  <!-- Farcaster Mini App Metadata -->
+  <meta name="fc:miniapp" content='{
+    "version":"1",
+    "imageUrl":"https://agentcate-github-io.vercel.app/image.png",
+    "button":{
+      "title":"Claim WL Spot",
+      "action":{
+        "type":"launch_frame",
+        "name":"Agent Cat",
+        "url":"https://agentcate-github-io.vercel.app/",
+        "splashImageUrl":"https://agentcate-github-io.vercel.app/splash.png",
+        "splashBackgroundColor":"#ff4d8d"
+      }
+    }
+  }' />
   <link href="https://fonts.googleapis.com/css2?family=Monument+Extended:wght@400;800&family=Neue+Montreal:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
