@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Agent Cat • Farcaster Mini App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Monument+Extended:wght@400;800&family=Neue+Montreal:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #111111;
+      --pink: #ff00ff;
+      --blue: #00ffff;
+      --accent: #ff00ff;
+      --text: #ffffff;
+      --text-light: #cccccc;
+      --glitch-1: #ff00ff;
+      --glitch-2: #00ffff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Neue Montreal', sans-serif;
+      min-height: 100vh;
+      padding: 16px;
+      background-image: 
+        linear-gradient(45deg, rgba(255,0,255,0.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,0,255,0.05) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,0,255,0.05) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,0,255,0.05) 75%);
+      background-size: 20px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Glitch Scanline Effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.2) 51%,
+        rgba(0,0,0,0) 100%
+      );
+      background-size: 100% 4px;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+    
+    /* CRT Monitor Curvature Effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.9);
+      pointer-events: none;
+      z-index: 9998;
+      border-radius: 2px;
+    }
+    
+    /* Glitch Background */
+    .glitch-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(90deg, var(--glitch-1) 0%, transparent 50%),
+        linear-gradient(180deg, var(--glitch-2) 0%, transparent 50%);
+      background-size: 10px 10px;
+      opacity: 0.05;
+      z-index: -3;
+    }
+    
+    /* Digital Noise */
+    .noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+      opacity: 0.15;
+      z-index: -2;
+    }
+    
+    .container { 
+      max-width: 480px; 
+      margin: 0 auto; 
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      box-shadow: 0 0 30px rgba(255,0,255,0.2);
+    }
+
+    /* Header – Profile (Left) + About (Right) */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pink), transparent);
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .profile img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--pink);
+      filter: contrast(1.5) saturate(1.2);
+      box-shadow: 0 0 10px rgba(255,0,255,0.7);
+    }
+    .fid {
+      font-size: 0.9rem;
+      color: var(--blue);
+      font-weight: 600;
+      text-shadow: 0 0 5px rgba(0,255,255,0.7);
+      position: relative;
+    }
+    .fid::before {
+      content: '>';
+      margin-right: 5px;
+      color: var(--pink);
+    }
+    .about-btn {
+      background: transparent;
+      border: 1px solid var(--pink);
+      color: var(--pink);
+      padding: 8px 14px;
+      border-radius: 0;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 5px rgba(255,0,255,0.7);
+      box-shadow: 0 0 10px rgba(255,0,255,0.3);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-btn:hover {
+      background: rgba(255,0,255,0.1);
+      box-shadow: 0 0 15px rgba(255,0,255,0.5);
+      text-shadow: 0 0 10px rgba(255,0,255,1);
+    }
+    .about-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .about-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Title & Bio */
+    h1 {
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 2.8rem;
+      text-align: center;
+      color: var(--text);
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+      position: relative;
+      text-transform: uppercase;
+      animation: glitch 5s infinite;
+    }
+    
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      2% { transform: translate(-2px, 2px); }
+      4% { transform: translate(-2px, -2px); }
+      6% { transform: translate(2px, 2px); }
+      8% { transform: translate(2px, -2px); }
+      10% { transform: translate(0); }
+      100% { transform: translate(0); }
+    }
+    
+    h1::before,
+    h1::after {
+      content: 'Agent Cat';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    h1::before {
+      animation: glitch-top 3s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+      -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+    }
+    
+    h1::after {
+      animation: glitch-bottom 3.5s infinite;
+      clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+      -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+    }
+    
+    @keyframes glitch-top {
+      0% { transform: translate(0); opacity: 1; }
+      5% { transform: translate(1px, -1px); opacity: 0.8; }
+      10% { transform: translate(0); opacity: 1; }
+      15% { transform: translate(-1px, 1px); opacity: 0.8; }
+      20% { transform: translate(0); opacity: 1; }
+      100% { transform: translate(0); opacity: 1; }
+    }
+    
+    @keyframes glitch-bottom {
+      0% { transform: translate(0); opacity: 1; }
+      7% { transform: translate(-1px, 1px); opacity: 0.8; }
+      12% { transform: translate(0); opacity: 1; }
+      17% { transform: translate(1px, -1px); opacity: 0.8; }
+      22% { transform: translate(0); opacity: 1; }
+      100% { transform: translate(0); opacity: 1; }
+    }
+    
+    .bio {
+      text-align: center;
+      font-size: 1rem;
+      color: var(--text-light);
+      margin-bottom: 28px;
+      line-height: 1.5;
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
+
+    /* Enhanced Timer */
+    .timer-container {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 0;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255,0,255,0.5);
+      box-shadow: 0 0 20px rgba(255,0,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .timer-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,0,255,0.1), transparent);
+      z-index: -1;
+    }
+    .timer-title {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--pink);
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255,0,255,0.7);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .timer {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    .time-box {
+      background: rgba(0,0,0,0.8);
+      padding: 14px 10px;
+      border-radius: 0;
+      min-width: 70px;
+      text-align: center;
+      border: 1px solid rgba(0,255,255,0.5);
+      box-shadow: 0 0 10px rgba(0,255,255,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .time-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0,255,255,0.5);
+      border-color: rgba(0,255,255,0.8);
+    }
+    .time-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    .time-box:hover::before {
+      left: 100%;
+    }
+    .num {
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 2.2rem;
+      color: var(--blue);
+      text-shadow: 0 0 10px rgba(0,255,255,0.7);
+      line-height: 1;
+    }
+    .lbl { 
+      font-size: 0.75rem; 
+      color: var(--text-light); 
+      margin-top: 4px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Enhanced Stats Cards */
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: rgba(0,0,0,0.8);
+      padding: 18px 12px;
+      border-radius: 0;
+      text-align: center;
+      border: 1px solid rgba(255,0,255,0.5);
+      box-shadow: 0 0 15px rgba(255,0,255,0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card:nth-child(even) {
+      border-color: rgba(0,255,255,0.5);
+      box-shadow: 0 0 15px rgba(0,255,255,0.2);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--blue));
+    }
+    .stat-card:nth-child(even)::before {
+      background: linear-gradient(90deg, var(--blue), var(--pink));
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(255,0,255,0.4);
+      border-color: rgba(255,0,255,0.8);
+    }
+    .stat-card:nth-child(even):hover {
+      box-shadow: 0 0 20px rgba(0,255,255,0.4);
+      border-color: rgba(0,255,255,0.8);
+    }
+    .stat-num {
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 2.4rem;
+      color: var(--pink);
+      text-shadow: 0 0 10px rgba(255,0,255,0.7);
+      margin-bottom: 4px;
+    }
+    .stat-card:nth-child(even) .stat-num {
+      color: var(--blue);
+      text-shadow: 0 0 10px rgba(0,255,255,0.7);
+    }
+    .stat-label { 
+      font-size: 0.85rem; 
+      color: var(--text-light); 
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Enhanced Cast Button */
+    .cast-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      font-family: 'Monument Extended', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      text-align: center;
+      border-radius: 0;
+      text-decoration: none;
+      margin-bottom: 40px;
+      box-shadow: 0 0 20px rgba(255,0,255,0.3);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--pink);
+      cursor: pointer;
+      text-shadow: 0 0 10px rgba(255,0,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .cast-btn:active { 
+      transform: scale(0.98); 
+    }
+    .cast-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .cast-btn:hover::before {
+      left: 100%;
+    }
+    .cast-btn:hover {
+      box-shadow: 0 0 30px rgba(255,0,255,0.6);
+      text-shadow: 0 0 15px rgba(255,0,255,1);
+      background: rgba(0,0,0,0.9);
+    }
+
+    /* Gallery */
+    .gallery-title {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--pink);
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255,0,255,0.7);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .carousel {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      mask-image: linear-gradient(90deg, transparent, white 15%, white 85%, transparent);
+      padding: 10px 0;
+      margin-bottom: 30px;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      animation: scroll 35s linear infinite;
+      width: max-content;
+    }
+    .nft {
+      width: 160px;
+      height: 160px;
+      border-radius: 0;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,0,255,0.5);
+      box-shadow: 0 0 15px rgba(255,0,255,0.3);
+      scroll-snap-align: start;
+      transition: all 0.3s ease;
+      position: relative;
+      filter: contrast(1.2) saturate(1.1);
+    }
+    .nft::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1));
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .nft:hover {
+      transform: scale(1.05);
+      border-color: var(--pink);
+      box-shadow: 0 0 25px rgba(255,0,255,0.5);
+      filter: contrast(1.5) saturate(1.3);
+    }
+    .nft:hover::before {
+      opacity: 1;
+    }
+    .nft img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover;
+      position: relative;
+      z-index: 0;
+    }
+
+    @keyframes scroll { 
+      0% { transform: translateX(0); } 
+      100% { transform: translateX(-50%); } 
+    }
+
+    /* Team Section */
+    .team-section {
+      margin-bottom: 40px;
+    }
+    .team-title {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--blue);
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(0,255,255,0.7);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .team-member {
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .team-member:hover {
+      transform: translateY(-5px);
+    }
+    .team-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 0;
+      margin: 0 auto 12px;
+      border: 1px solid var(--pink);
+      box-shadow: 0 0 15px rgba(255,0,255,0.4);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      filter: contrast(1.2) saturate(1.1);
+    }
+    .team-member:hover .team-avatar {
+      border-color: var(--blue);
+      box-shadow: 0 0 20px rgba(0,255,255,0.6);
+      filter: contrast(1.5) saturate(1.3);
+    }
+    .team-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .team-name {
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 4px;
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
+    .team-role {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* About Popup */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+    .popup {
+      background: rgba(0,0,0,0.9);
+      padding: 30px;
+      border-radius: 0;
+      max-width: 340px;
+      text-align: center;
+      border: 1px solid var(--pink);
+      position: relative;
+      box-shadow: 0 0 30px rgba(255,0,255,0.5);
+    }
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--pink);
+      cursor: pointer;
+      text-shadow: 0 0 10px rgba(255,0,255,0.7);
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.8rem;
+      padding: 20px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Digital Terminal Effect */
+    .terminal-line {
+      position: relative;
+    }
+    .terminal-line::after {
+      content: '_';
+      position: absolute;
+      right: -10px;
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Digital Glitch Background Elements -->
+  <div class="glitch-bg"></div>
+  <div class="noise"></div>
+  <div class="scanlines"></div>
+
+  <div class="container">
+
+    <!-- Header: Profile + About -->
+    <div class="header">
+      <div class="profile">
+        <img src="https://i.imgur.com/example.jpg" alt="User" id="pfp">
+        <div class="fid">FID: <span id="fid">321529</span></div>
+      </div>
+      <button class="about-btn" onclick="document.getElementById('aboutOverlay').style.display='flex'">About</button>
+    </div>
+
+    <h1>Agent Cat</h1>
+    <p class="bio">AgentCat 3333 – The Secret Agents of the Internet</p>
+
+    <!-- Enhanced Timer -->
+    <div class="timer-container">
+      <div class="timer-title">MINT STARTS IN</div>
+      <div class="timer" id="timer">
+        <div class="time-box"><div class="num" id="days">00</div><div class="lbl">DAYS</div></div>
+        <div class="time-box"><div class="num" id="hrs">00</div><div class="lbl">HOURS</div></div>
+        <div class="time-box"><div class="num" id="mins">00</div><div class="lbl">MINUTES</div></div>
+        <div class="time-box"><div class="num" id="secs">00</div><div class="lbl">SECONDS</div></div>
+      </div>
+    </div>
+
+    <!-- Enhanced Stats -->
+    <div class="stats">
+      <div class="stat-card"><div class="stat-num">3333</div><div class="stat-label">Total Supply</div></div>
+      <div class="stat-card"><div class="stat-num">1111</div><div class="stat-label">WL Spots</div></div>
+      <div class="stat-card"><div class="stat-num">Free</div><div class="stat-label">Mint Price</div></div>
+      <div class="stat-card"><div class="stat-num">1</div><div class="stat-label">Per Wallet</div></div>
+    </div>
+
+    <!-- Enhanced Cast Button -->
+    <button class="cast-btn" onclick="window.open('https://warpcast.com/~/compose?text=I%27m%20claiming%20my%20WL%20for%20The%20Nerds%20Universe%20%F0%9F%9F%AA%E2%9C%A8', '_blank')">
+      Cast to WL Claim
+    </button>
+
+    <p class="gallery-title">Collection Preview</p>
+    <div class="carousel">
+      <div class="carousel-track" id="track"></div>
+    </div>
+    
+    <!-- Team Section -->
+    <div class="team-section">
+      <p class="team-title">Our Team</p>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="team-avatar">
+            <img src="https://iili.io/fqCRUqg.jpg" alt="Olivia">
+          </div>
+          <div class="team-name">Olivia</div>
+          <div class="team-role">Founder</div>
+        </div>
+        <div class="team-member">
+          <div class="team-avatar">
+            <img src="https://iili.io/fqCRkzP.jpg" alt="Sam">
+          </div>
+          <div class="team-name">Sam</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-member">
+          <div class="team-avatar">
+            <img src="https://iili.io/fqCROmB.jpg" alt="Jordan">
+          </div>
+          <div class="team-name">Ming</div>
+          <div class="team-role">Designer</div>
+        </div>
+        <div class="team-member">
+          <div class="team-avatar">
+            <img src="https://iili.io/fqCRNeV.png" alt="Taylor">
+          </div>
+          <div class="team-name">Noah</div>
+          <div class="team-role">Community</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Agent Cat • Built on Base</p>
+    </div>
+
+  </div>
+
+  <!-- About Popup -->
+  <div class="overlay" id="aboutOverlay" onclick="this.style.display='none'">
+    <div class="popup" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="document.getElementById('aboutOverlay').style.display='none'">×</button>
+      <h2 style="color:var(--pink);margin-bottom:16px;text-shadow: 0 0 10px rgba(255,0,255,0.7);font-family:'Monument Extended';">Agent Cat</h2>
+      <p style="font-size:0.95rem;line-height:1.6;color:#ccc;">
+        AgentCat is a next-gen NFT collection of 3333 elite<br>
+        digital agents operating inside the Farcaster ecosystem.
+Each AgentCat is uniquely designed with covert abilities, hidden identities, and mission-grade traits that blend style with power.<br><br>
+        Built during the rise of the Internet token,<br>
+        AgentCat aims to become the ultimate on-chain identity for creators, explorers, and Farcaster natives.
+Holding an AgentCat grants access to secret missions, early drops, community rewards, whitelist benefits, and future mini-app utilities.<br><br>
+The AgentCats aren’t just NFTs —
+They are your undercover identity in the decentralized internet.
+
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Countdown (change date here)
+    const mintDate = new Date("2025-12-01T12:00:00Z").getTime();
+    function updateTimer() {
+      const now = new Date().getTime();
+      const diff = mintDate - now;
+      if (diff <= 0) {
+        document.getElementById("timer").innerHTML = "<div style='color:var(--pink);font-size:1.6rem;text-align:center;text-shadow: 0 0 10px rgba(255,0,255,0.7);font-family:''Monument Extended'';'>MINT LIVE NOW</div>";
+        return;
+      }
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const s = Math.floor((diff % (1000*60)) / 1000);
+      document.getElementById("days").innerText = d.toString().padStart(2,"0");
+      document.getElementById("hrs").innerText = h.toString().padStart(2,"0");
+      document.getElementById("mins").innerText = m.toString().padStart(2,"0");
+      document.getElementById("secs").innerText = s.toString().padStart(2,"0");
+    }
+    
+    // NFT Images
+    const images = [
+      "https://iili.io/fqCiUOu.webp","https://iili.io/fqCiSRe.webp","https://iili.io/fqCi8J9.webp",
+      "https://iili.io/fqCielS.webp","https://iili.io/fqCiwil.webp","https://iili.io/fqCijV4.webp",
+      "https://iili.io/fqCiGHX.webp","https://iili.io/fqCi1St.webp","https://iili.io/fqCiMRn.webp",
+      "https://iili.io/fqCihxf.webp","https://iili.io/fqCijV4.webp"
+    ];
+    
+    // Initialize everything when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTimer();
+      setInterval(updateTimer, 1000);
+      
+      const track = document.getElementById("track");
+      [...images, ...images].forEach(src => {  // duplicate for seamless loop
+        const div = document.createElement("div");
+        div.className = "nft";
+        div.innerHTML = `<img src="${src}" loading="lazy">`;
+        track.appendChild(div);
+      });
+
+      // Optional: Auto-detect Farcaster user (works inside Warpcast browser)
+      if (window.fc) {
+        window.fc.user().then(u => {
+          document.getElementById("pfp").src = u.pfp;
+          document.getElementById("fid").innerText = u.fid;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
