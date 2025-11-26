@@ -4,31 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Agent Cat • Farcaster Mini App</title>
-  <!-- Farcaster Frame -->
-<meta property="og:title" content="Agent Cat • Mini App" />
-<meta property="og:image" content="https://agentcate-github-io.vercel.app/image.png" />
-<meta name="fc:frame" content="vNext" />
-
-<meta name="fc:frame:button:1" content="Claim WL" />
-<meta name="fc:frame:button:1:action" content="launch_frame" />
-<meta name="fc:frame:button:1:target" content="https://agentcate-github-io.vercel.app/miniapp" />
-
-<!-- Farcaster Mini App -->
-<meta name="fc:miniapp:url" content="https://agentcate-github-io.vercel.app/miniapp" />
-<meta name="fc:miniapp" content='{
-  "version": "1",
-  "name": "Agent Cat",
-  "imageUrl": "https://agentcate-github-io.vercel.app/image.png",
-  "button": {
-    "title": "Launch",
-    "action": {
-      "type": "launch_frame",
-      "url": "https://agentcate-github-io.vercel.app/miniapp",
-      "splashImageUrl": "https://agentcate-github-io.vercel.app/splash.png",
-      "splashBackgroundColor": "#ff4d8d"
+  <!-- Farcaster Mini App Metadata -->
+  <meta name="fc:miniapp" content='{
+    "version":"1",
+    "imageUrl":"https://agentcate-github-io.vercel.app/image.png",
+    "button":{
+      "title":"Claim WL Spot",
+      "action":{
+        "type":"launch_frame",
+        "name":"Agent Cat",
+        "url":"https://agentcate-github-io.vercel.app/",
+        "splashImageUrl":"https://agentcate-github-io.vercel.app/splash.png",
+        "splashBackgroundColor":"#ff4d8d"
+      }
     }
-  }
-}' />
+  }' />
   <link href="https://fonts.googleapis.com/css2?family=Monument+Extended:wght@400;800&family=Neue+Montreal:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -44,17 +34,11 @@
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: var(--bg);
+      background: var(--bg) url('https://iili.io/fqkFPgS.jpg') center/cover no-repeat;
       color: var(--text);
       font-family: 'Neue Montreal', sans-serif;
       min-height: 100vh;
       padding: 16px;
-      background-image: 
-        linear-gradient(45deg, rgba(255,0,255,0.05) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(255,0,255,0.05) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, rgba(255,0,255,0.05) 75%),
-        linear-gradient(-45deg, transparent 75%, rgba(255,0,255,0.05) 75%);
-      background-size: 20px 20px;
       position: relative;
       overflow-x: hidden;
     }
@@ -126,7 +110,7 @@
       position: relative;
       border: 1px solid rgba(255,255,255,0.1);
       padding: 20px;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.3);
       box-shadow: 0 0 30px rgba(255,0,255,0.2);
     }
 
