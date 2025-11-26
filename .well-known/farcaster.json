@@ -1,0 +1,10 @@
+{
+  "miniapp": {
+    "version": "1",
+    "name": "Agent Cat",
+    "iconUrl": "https://agentcate-github-io.vercel.app/icon.png",
+    "homeUrl": "https://agentcate-github-io.vercel.app/",
+    "imageUrl": "https://agentcate-github-io.vercel.app/image.png",
+    "splashImageUrl": "https://agentcate-github-io.vercel.app/splash.png"
+  }
+}
