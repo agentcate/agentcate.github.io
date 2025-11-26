@@ -4,25 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Agent Cat • Farcaster Mini App</title>
-  <meta property="og:title" content="Agent Cat • Farcaster Mini App" />
+  <!-- Farcaster Frame -->
+<meta property="og:title" content="Agent Cat • Mini App" />
 <meta property="og:image" content="https://agentcate-github-io.vercel.app/image.png" />
-<meta property="fc:frame" content="vNext" />
+<meta name="fc:frame" content="vNext" />
 
-<!-- Button 1 -->
-<meta property="fc:frame:button:1" content="Claim WL Spot" />
-<meta property="fc:frame:button:1:action" content="launch_frame" />
-<meta property="fc:frame:button:1:target" content="https://agentcate-github-io.vercel.app/" />
-<meta property="fc:frame:button:1:post_url" content="https://agentcate-github-io.vercel.app/" />
+<meta name="fc:frame:button:1" content="Claim WL" />
+<meta name="fc:frame:button:1:action" content="launch_frame" />
+<meta name="fc:frame:button:1:target" content="https://agentcate-github-io.vercel.app/miniapp" />
 
-<!-- Launch Frame Metadata -->
-<meta name="fc:frame:launch" content='{
+<!-- Farcaster Mini App -->
+<meta name="fc:miniapp:url" content="https://agentcate-github-io.vercel.app/miniapp" />
+<meta name="fc:miniapp" content='{
   "version": "1",
   "name": "Agent Cat",
-  "url": "https://agentcate-github-io.vercel.app/",
-  "splashImageUrl": "https://agentcate-github-io.vercel.app/splash.png",
-  "splashBackgroundColor": "#ff4d8d"
+  "imageUrl": "https://agentcate-github-io.vercel.app/image.png",
+  "button": {
+    "title": "Launch",
+    "action": {
+      "type": "launch_frame",
+      "url": "https://agentcate-github-io.vercel.app/miniapp",
+      "splashImageUrl": "https://agentcate-github-io.vercel.app/splash.png",
+      "splashBackgroundColor": "#ff4d8d"
+    }
+  }
 }' />
-
   <link href="https://fonts.googleapis.com/css2?family=Monument+Extended:wght@400;800&family=Neue+Montreal:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
