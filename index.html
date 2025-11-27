@@ -590,6 +590,148 @@
       letter-spacing: 1px;
     }
 
+    /* New Pipeline Section */
+    .pipeline-section {
+      margin-bottom: 40px;
+    }
+    .pipeline-title {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--pink);
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255,0,255,0.7);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .pipeline-carousel {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      mask-image: linear-gradient(90deg, transparent, white 15%, white 85%, transparent);
+      padding: 10px 0;
+      margin-bottom: 30px;
+    }
+    .pipeline-track {
+      display: flex;
+      gap: 16px;
+      animation: scroll 30s linear infinite;
+      width: max-content;
+    }
+    .pipeline-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,0,255,0.5);
+      box-shadow: 0 0 15px rgba(255,0,255,0.3);
+      scroll-snap-align: start;
+      transition: all 0.3s ease;
+      position: relative;
+      filter: contrast(1.2) saturate(1.1);
+    }
+    .pipeline-logo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1));
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .pipeline-logo:hover {
+      transform: scale(1.1);
+      border-color: var(--pink);
+      box-shadow: 0 0 20px rgba(255,0,255,0.5);
+      filter: contrast(1.5) saturate(1.3);
+    }
+    .pipeline-logo:hover::before {
+      opacity: 1;
+    }
+    .pipeline-logo img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* New Icons Section */
+    .icons-section {
+      margin-bottom: 40px;
+    }
+    .icons-title {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--blue);
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(0,255,255,0.7);
+      font-family: 'Monument Extended', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .icons-carousel {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      mask-image: linear-gradient(90deg, transparent, white 15%, white 85%, transparent);
+      padding: 10px 0;
+      margin-bottom: 30px;
+    }
+    .icons-track {
+      display: flex;
+      gap: 16px;
+      animation: scroll 25s linear infinite;
+      width: max-content;
+    }
+    .icon-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,255,255,0.5);
+      box-shadow: 0 0 15px rgba(0,255,255,0.3);
+      scroll-snap-align: start;
+      transition: all 0.3s ease;
+      position: relative;
+      filter: contrast(1.2) saturate(1.1);
+    }
+    .icon-logo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1));
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .icon-logo:hover {
+      transform: scale(1.1);
+      border-color: var(--blue);
+      box-shadow: 0 0 20px rgba(0,255,255,0.5);
+      filter: contrast(1.5) saturate(1.3);
+    }
+    .icon-logo:hover::before {
+      opacity: 1;
+    }
+    .icon-logo img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover;
+      position: relative;
+      z-index: 0;
+    }
+
     /* About Popup */
     .overlay {
       position: fixed;
@@ -736,6 +878,22 @@
       </div>
     </div>
     
+    <!-- New Pipeline Section -->
+    <div class="pipeline-section">
+      <p class="pipeline-title">Pipeline</p>
+      <div class="pipeline-carousel">
+        <div class="pipeline-track" id="pipeline-track"></div>
+      </div>
+    </div>
+    
+    <!-- New Icons Section -->
+    <div class="icons-section">
+      <p class="icons-title">Icons</p>
+      <div class="icons-carousel">
+        <div class="icons-track" id="icons-track"></div>
+      </div>
+    </div>
+    
     <div class="footer">
       <p>Agent Cat • Built on Base</p>
     </div>
@@ -789,17 +947,61 @@ They are your undercover identity in the decentralized internet.
       "https://iili.io/fqCihxf.webp","https://iili.io/fqCijV4.webp"
     ];
     
+    // Pipeline Logos
+    const pipelineLogos = [
+      "https://iili.io/fBfQola.jpg",
+      "https://iili.io/fBfQnKg.png",
+      "https://iili.io/fBfQ2AQ.jpg",
+      "https://iili.io/fBfQ9cb.jpg",
+      "https://iili.io/fBfLbV9.jpg",
+      "https://iili.io/fBfQdHx.jpg",
+      "https://iili.io/fBfLDo7.jpg",
+      "https://iili.io/fBfLQN2.jpg"
+    ];
+    
+    // Icons Logos
+    const iconsLogos = [
+      "https://iili.io/fBfQ2AQ.jpg",
+      "https://iili.io/fBfQdHx.jpg",
+      "https://iili.io/fBfQola.jpg",
+      "https://iili.io/fBfQ2AQ.jpg",
+      "https://iili.io/fBfQnKg.png",
+      "https://iili.io/fBfQIHv.png",
+      "https://iili.io/fBfQ5xI.jpg",
+      "https://iili.io/fBfQYiX.jpg",
+      "https://iili.io/fBfQcfn.jpg"
+    ];
+    
     // Initialize everything when the page loads
     document.addEventListener('DOMContentLoaded', function() {
       updateTimer();
       setInterval(updateTimer, 1000);
       
+      // NFT Gallery
       const track = document.getElementById("track");
       [...images, ...images].forEach(src => {  // duplicate for seamless loop
         const div = document.createElement("div");
         div.className = "nft";
         div.innerHTML = `<img src="${src}" loading="lazy">`;
         track.appendChild(div);
+      });
+      
+      // Pipeline Logos
+      const pipelineTrack = document.getElementById("pipeline-track");
+      [...pipelineLogos, ...pipelineLogos].forEach(src => {  // duplicate for seamless loop
+        const div = document.createElement("div");
+        div.className = "pipeline-logo";
+        div.innerHTML = `<img src="${src}" loading="lazy">`;
+        pipelineTrack.appendChild(div);
+      });
+      
+      // Icons Logos
+      const iconsTrack = document.getElementById("icons-track");
+      [...iconsLogos, ...iconsLogos].forEach(src => {  // duplicate for seamless loop
+        const div = document.createElement("div");
+        div.className = "icon-logo";
+        div.innerHTML = `<img src="${src}" loading="lazy">`;
+        iconsTrack.appendChild(div);
       });
 
       // Optional: Auto-detect Farcaster user (works inside Warpcast browser)
