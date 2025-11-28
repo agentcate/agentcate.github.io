@@ -409,6 +409,52 @@
       letter-spacing: 1px;
     }
 
+    /* New Deepcaster Button */
+    .deepcaster-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      font-family: 'Monument Extended', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      text-align: center;
+      border-radius: 0;
+      text-decoration: none;
+      margin-bottom: 16px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--blue);
+      cursor: pointer;
+      text-shadow: 0 0 10px rgba(0,255,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .deepcaster-btn:active { 
+      transform: scale(0.98); 
+    }
+    .deepcaster-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .deepcaster-btn:hover::before {
+      left: 100%;
+    }
+    .deepcaster-btn:hover {
+      box-shadow: 0 0 30px rgba(0,255,255,0.6);
+      text-shadow: 0 0 15px rgba(0,255,255,1);
+      background: rgba(0,0,0,0.9);
+    }
+
     /* Enhanced Cast Button */
     .cast-btn {
       display: block;
@@ -833,6 +879,11 @@
       <div class="stat-card"><div class="stat-num">1</div><div class="stat-label">Per Wallet</div></div>
     </div>
 
+    <!-- New Deepcaster Button -->
+    <button class="deepcaster-btn" onclick="window.open('https://farcaster.xyz/deepcaster', '_blank')">
+      Deepcaster
+    </button>
+
     <!-- Enhanced Cast Button -->
     <button class="cast-btn" onclick="window.open('https://warpcast.com/~/compose?text=I%27m%20claiming%20my%20WL%20for%20Agent%20Cat%20%F0%9F%9F%A6%20Base%0Ahttps%3A%2F%2Fagentcate-github-io.vercel.app%2F', '_blank')">
       Cast to WL Claim
@@ -912,7 +963,7 @@ Each AgentCat is uniquely designed with covert abilities, hidden identities, and
         Built during the rise of the Internet token,<br>
         AgentCat aims to become the ultimate on-chain identity for creators, explorers, and Farcaster natives.
 Holding an AgentCat grants access to secret missions, early drops, community rewards, whitelist benefits, and future mini-app utilities.<br><br>
-The AgentCats aren’t just NFTs —
+The AgentCats aren't just NFTs —
 They are your undercover identity in the decentralized internet.
 
       </p>
@@ -920,8 +971,8 @@ They are your undercover identity in the decentralized internet.
   </div>
 
   <script>
-    // Countdown (change date here)
-    const mintDate = new Date("2025-12-01T12:00:00Z").getTime();
+    // Countdown (updated date - 2 days earlier)
+    const mintDate = new Date("2025-11-29T12:00:00Z").getTime();
     function updateTimer() {
       const now = new Date().getTime();
       const diff = mintDate - now;
